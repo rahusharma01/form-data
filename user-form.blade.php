@@ -6,25 +6,25 @@
 </head>
 <body>
 
-
-    <h1>User Form</h1>
-    <form id="userForm" method="post" enctype="multipart/form-data">
+ 
+    <form id="userForm" method="post" enctype="multipart/form-data" style="text-align: center;margin-top:100px;">
         @csrf
         <div>
             <label for="name">Name:</label>
             <input type="text" name="name" id="name">
             <span id="nameError"></span>
         </div>
+        <br/>
         <div>
             <label for="email">Email:</label>
             <input type="text" name="email" id="email">
             <span id="emailError"></span>
-        </div>
+        </div><br/>
         <div>
             <label for="phone">Phone:</label>
             <input type="text" name="phone" id="phone">
             <span id="phoneError"></span>
-        </div>
+        </div><br/>
         <div>
             <label for="country">Country:</label>
             <select name="country" id="country-dropdown">
@@ -37,33 +37,32 @@
             </select>
             <span id="countryError"></span>
         </div>
-         
+        <br/>
         <div>
             <label for="state">State:</label>
             <select id="state-dropdown" name="state" class="form-control">
             <option value="">Select State</option> 
             </select>
             <span id="stateError"></span>
-        </div>
+        </div><br/>
         <div>
             <label for="city">City:</label>
             <select id="city-dropdown" name="city" class="form-control">
             <option value="">Select City</option> 
             </select>
             <span id="cityError"></span>
-        </div>
+        </div><br/>
         <div>
             <label for="profile_image">Profile Image:</label>
             <input type="file" name="profile_image" id="profile_image">
             <span id="profileImageError"></span>
-        </div>
+        </div><br/>
         <div>
             <button type="submit">Submit</button>
         </div>
     </form>
-
-    <h2>Users Table</h2>
-    <table border="1">
+ 
+    <table border="1"  style="margin-left: 500px;margin-top:40px;">
         <thead>
             <tr>
                 <th>Name</th>
