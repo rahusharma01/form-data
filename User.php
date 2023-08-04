@@ -23,9 +23,8 @@ class User extends Authenticatable
         'password',
         'phone',
         'country',
-        'city',
         'state',
-        'profile_image',
+        'city',
     ];
 
     /**
@@ -47,8 +46,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function group()
+    public function countries()
     {
-        return $this->hasOne('App\Models\UserGroups','id','user_group_id');
+        return $this->hasOne('App\Models\Country','id','country');
+    }
+
+    public function states()
+    {
+        return $this->hasOne('App\Models\State','id','state');
+    }
+    public function cities()
+    {
+        return $this->hasOne('App\Models\City','id','city');
     }
 }

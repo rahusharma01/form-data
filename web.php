@@ -13,6 +13,8 @@ use App\Http\Controllers\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */  
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::post('/users', [UserController::class, 'store'])->name('users.store'); 
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+	Route::post('/users-store', [UserController::class, 'store'])->name('users.store');
+	Route::post('/states', [UserController::class, 'states'])->name('states');
+	Route::post('/cities', [UserController::class, 'cities'])->name('cities'); 
  

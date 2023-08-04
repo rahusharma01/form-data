@@ -27,22 +27,28 @@
         </div>
         <div>
             <label for="country">Country:</label>
-            <select name="country" id="country">
+            <select name="country" id="country-dropdown">
                 <option value="">Select Country</option> 
+                @foreach ($data as $val) 
+                    <option value="{{$val->id}}">
+                        {{$val->name}}
+                    </option>
+                @endforeach
             </select>
             <span id="countryError"></span>
         </div>
+         
         <div>
             <label for="state">State:</label>
-            <select name="state" id="state">
-                <option value="">Select State</option>
+            <select id="state-dropdown" name="state" class="form-control">
+            <option value="">Select State</option> 
             </select>
             <span id="stateError"></span>
         </div>
         <div>
             <label for="city">City:</label>
-            <select name="city" id="city">
-                <option value="">Select City</option> 
+            <select id="city-dropdown" name="city" class="form-control">
+            <option value="">Select City</option> 
             </select>
             <span id="cityError"></span>
         </div>
@@ -75,9 +81,9 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->phone }}</td>
-                    <td>{{ $user->country }}</td>
-                    <td>{{ $user->state }}</td>
-                    <td>{{ $user->city }}</td>
+                    <td>{{ $user->countries->name }}</td>
+                    <td>{{ $user->states->name }}</td>
+                    <td>{{ $user->cities->name }}</td>
                     <td>
                         @if ($user->profile_image)
                             <img src="{{ asset('public/images/' . $user->profile_image) }}" alt="{{ $user->name }}" height="50">
@@ -87,40 +93,10 @@
             @endforeach
         </tbody>
     </table>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/country-state-city/1.2.2/js/country-state-city.min.js"></script>
-<script> 
-
-    $(document).ready(function () { 
-        let countries = Object.values(countryStateCity.getCountryList());
-        countries.forEach((country) => {
-            $('#country').append(`<option value="${country.isoCode}">${country.name}</option>`);
-        });
  
-        $('#country').change(function () {
-            let countryCode = $(this).val();
-            let states = Object.values(countryStateCity.getStatesByCountryCode(countryCode));
-            $('#state').html('<option value="">Select State</option>');
-            states.forEach((state) => {
-                $('#state').append(`<option value="${state.isoCode}">${state.name}</option>`);
-            });
-            $('#city').html('<option value="">Select City</option>');
-        });
- 
-        $('#state').change(function () {
-            let countryCode = $('#country').val();
-            let stateCode = $(this).val();
-            let cities = Object.values(countryStateCity.getCitiesByCountryCodeAndStateCode(countryCode, stateCode));
-            $('#city').html('<option value="">Select City</option>');
-            cities.forEach((city) => {
-                $('#city').append(`<option value="${city.name}">${city.name}</option>`);
-            });
-        });
- 
-    });
-</script>
     <script> 
         $(document).ready(function () {
             $('#country').select2();
@@ -169,12 +145,100 @@
                 });
             }
         });
-    </script>
+    </script> 
+<script>
 
+    $(document).ready(function () { 
+
+        $('#country-dropdown').on('change', function () {
+
+            var idCountry = this.value;
+
+            $("#state-dropdown").html('');
+
+            $.ajax({
+
+                url: "{{url('/states')}}",
+
+                type: "POST",
+
+                data: {
+
+                    country_id: idCountry,
+
+                    _token: '{{csrf_token()}}'
+
+                },
+
+                dataType: 'json',
+
+                success: function (result) {
+
+                    $('#state-dropdown').html('<option value="">-- Select State --</option>');
+
+                    $.each(result.states, function (key, value) {
+
+                        $("#state-dropdown").append('<option value="' + value
+
+                            .id + '">' + value.name + '</option>');
+
+                    });
+
+                    $('#city-dropdown').html('<option value="">-- Select City --</option>');
+
+                }
+
+            });
+
+        });
+
+ 
+
+        $('#state-dropdown').on('change', function () {
+
+            var idState = this.value;
+
+            $("#city-dropdown").html('');
+
+            $.ajax({
+
+                url: "{{url('/cities')}}",
+
+                type: "POST",
+
+                data: {
+
+                    state_id: idState,
+
+                    _token: '{{csrf_token()}}'
+
+                },
+
+                dataType: 'json',
+
+                success: function (res) {
+
+                    $('#city-dropdown').html('<option value="">-- Select City --</option>');
+
+                    $.each(res.cities, function (key, value) {
+
+                        $("#city-dropdown").append('<option value="' + value
+
+                            .id + '">' + value.name + '</option>');
+
+                    });
+
+                }
+
+            });
+
+        });
+
+
+
+    });
+
+</script>
+ 
 </body>
 </html>
-
-
-
-
-
